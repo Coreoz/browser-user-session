@@ -1,6 +1,6 @@
-import PageActivityManager from './PageActivityManager';
+import { PageActivityManager } from './PageActivityManager';
 
-export default class NonePageActivityManager implements PageActivityManager {
+export class NonePageActivityManager implements PageActivityManager {
   // eslint-disable-next-line class-methods-use-this
   startService(): void {
   }

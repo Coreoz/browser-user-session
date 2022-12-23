@@ -2,8 +2,8 @@ import { Observable, observable, WritableObservable } from 'micro-observables';
 import { HttpError, HttpPromise } from 'simple-http-rest-client';
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
-import IdlenessDetector from './IdlenessDetector';
-import PageActivityManager, { PageActivity } from './page-activity/PageActivityManager';
+import { IdlenessDetector } from './IdlenessDetector';
+import { PageActivityManager, PageActivity } from './page-activity/PageActivityManager';
 
 const logger = new Logger('JwtSessionManager');
 
@@ -30,7 +30,7 @@ export type JwtSessionManagerConfig = {
 /**
  * Handle the whole lifetime journey of a JWT session in the browser.
  */
-export default class JwtSessionManager<U extends ExpirableJwtValue> {
+export class JwtSessionManager<U extends ExpirableJwtValue> {
   private currentSession: WritableObservable<RefreshableJwtToken | undefined>;
 
   private currentUser: WritableObservable<U | undefined>;

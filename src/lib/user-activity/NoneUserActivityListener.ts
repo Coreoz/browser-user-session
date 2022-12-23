@@ -1,6 +1,6 @@
-import UserActivityListener from './UserActivityListener';
+import { UserActivityListener } from './UserActivityListener';
 
-export default class NoneUserActivityListener implements UserActivityListener {
+export class NoneUserActivityListener implements UserActivityListener {
   // eslint-disable-next-line class-methods-use-this
   startUserActivityDetector(): void {
   }

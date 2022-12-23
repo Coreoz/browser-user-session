@@ -3,7 +3,7 @@ export enum PageActivity {
   INACTIVE,
 }
 
-export default abstract class PageActivityManager {
+export abstract class PageActivityManager {
   abstract startService(onBrowserPageActivityChange: (pageActivityEvent: PageActivity) => void): void;
 
   abstract stopService(): void;
