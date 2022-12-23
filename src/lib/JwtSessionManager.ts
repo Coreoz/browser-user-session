@@ -1,5 +1,5 @@
 import { Observable, observable, WritableObservable } from 'micro-observables';
-import { HttpPromise } from 'simple-http-rest-client';
+import { HttpError, HttpPromise } from 'simple-http-rest-client';
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
 import IdlenessDetector from './IdlenessDetector';
@@ -54,7 +54,7 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
    * Get the JWT session, generally to make API calls
    */
   getSessionToken(): Observable<string | undefined> {
-    return this.currentSession.readOnly().select((session) => session?.webSessionToken);
+    return this.currentSession.readOnly().select((session: RefreshableJwtToken | undefined) => session?.webSessionToken);
   }
 
   /**
@@ -68,7 +68,7 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
    * Verify if there is a current user present
    */
   isAuthenticated() {
-    return this.currentUser.select((user) => user !== undefined);
+    return this.currentUser.select((user: U | undefined) => user !== undefined);
   }
 
   // actions
@@ -197,8 +197,8 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
     this
       .sessionRefresher
       .refresh(currentSession.webSessionToken)
-      .then((updatedSessionToken) => this.storeNewSession(updatedSessionToken))
-      .catch((error) => {
+      .then((updatedSessionToken: RefreshableJwtToken) => this.storeNewSession(updatedSessionToken))
+      .catch((error: HttpError) => {
         if (error.errorCode === this.config.httpErrorAlreadyExpiredSessionToken) {
           logger.info('Session is expired, disconnecting...');
           this.discardSession();
