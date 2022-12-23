@@ -229,11 +229,18 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
       .startService((eventType: PageActivity) => this.onBrowserPageActivityChange(eventType));
   }
 
-  private onBrowserPageActivityChange(eventType: PageActivity) {
-    if (eventType === PageActivity.ACTIVE
-      && !this.isUserSessionValid(this.currentUserExpirationDateInSeconds)) {
-      logger.info('Expired session detected on browser page active, disconnecting...');
-      this.discardSession();
+  private onBrowserPageActivityChange(eventType: PageActivity): void {
+    if (eventType === PageActivity.ACTIVE) {
+      if (!this.isUserSessionValid(this.currentUserExpirationDateInSeconds)) {
+        logger.info('Expired session detected on browser page active, disconnecting...');
+        this.discardSession();
+      } else {
+        this.refreshSessionTokenScheduledJob?.execute();
+      }
+    }
+    if (eventType === PageActivity.INACTIVE) {
+      logger.info('Page became active, refresh token stopped...');
+      this.refreshSessionTokenScheduledJob?.cancel();
     }
   }
 
