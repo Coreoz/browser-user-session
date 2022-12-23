@@ -39,11 +39,13 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
 
   private refreshSessionTokenScheduledJob?: Job;
 
-  constructor(private readonly sessionRefresher: SessionRefresher,
+  constructor(
+    private readonly sessionRefresher: SessionRefresher,
     private readonly scheduler: Scheduler,
     private readonly pageActivityManager: PageActivityManager,
     private readonly idlenessDetector: IdlenessDetector,
-    private readonly config: JwtSessionManagerConfig) {
+    private readonly config: JwtSessionManagerConfig
+  ) {
     this.currentSession = observable(undefined);
     this.currentUser = observable(undefined);
   }
@@ -101,7 +103,7 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
   /**
    * Try restauring the user session from the browser local storage
    */
-  tryInitializingSessionFromStorage() {
+  tryInitializingSessionFromStorage(): void {
     const webSessionString = localStorage.getItem(this.config.localStorageCurrentSession);
     if (webSessionString) {
       const sessionToken: RefreshableJwtToken = JSON.parse(webSessionString);
@@ -125,14 +127,14 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
    * - Update the session token when it is updated from another tab
    * - Authenticate the user if he is connected from another tab
    */
-  synchronizeSessionFromOtherBrowserTags() {
+  synchronizeSessionFromOtherBrowserTags(): void {
     window.removeEventListener('storage', this.handleStorageChangeFromOtherTab, false);
     window.addEventListener('storage', this.handleStorageChangeFromOtherTab, false);
   }
 
   // internals
 
-  private handleStorageChangeFromOtherTab = (event: StorageEvent) => {
+  private handleStorageChangeFromOtherTab = (event: StorageEvent): void => {
     if (event.key === this.config.localStorageCurrentSession || event.key === null) {
       if (!event.newValue) {
         // the session has been discarded!
@@ -152,7 +154,7 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
     }
   };
 
-  private discardSession() {
+  private discardSession(): void {
     localStorage.removeItem(this.config.localStorageCurrentSession);
     this.currentSession.set(undefined);
     this.currentUser.set(undefined);
@@ -187,7 +189,7 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
     return user;
   }
 
-  private refreshSession() {
+  private refreshSession(): void {
     const currentSession = this.currentSession.get();
     if (currentSession === undefined) {
       logger.error('Trying to refresh session whereas the current session is empty');
@@ -208,7 +210,7 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
       });
   }
 
-  private startSessionRefreshAndIdleDetection(refreshDurationInMillis: number, inactiveDurationInMillis: number) {
+  private startSessionRefreshAndIdleDetection(refreshDurationInMillis: number, inactiveDurationInMillis: number): void {
     this.refreshSessionTokenScheduledJob = this.scheduler.schedule(
       'Refresh session token',
       () => this.refreshSession(),
@@ -235,9 +237,8 @@ export default class JwtSessionManager<U extends ExpirableJwtValue> {
     }
   }
 
-  private isUserSessionValid(expirationDateInSeconds?: number) {
-    return expirationDateInSeconds
-      && (expirationDateInSeconds * 1000 + this.config.thresholdInMillisToDetectExpiredSession > Date.now());
+  private isUserSessionValid(expirationDateInSeconds?: number): boolean {
+    return expirationDateInSeconds !== undefined && (expirationDateInSeconds * 1000 + this.config.thresholdInMillisToDetectExpiredSession > Date.now());
   }
 
   // eslint-disable-next-line class-methods-use-this
