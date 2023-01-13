@@ -239,7 +239,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
       }
     }
     if (eventType === PageActivity.INACTIVE) {
-      logger.info('Page became active, refresh token stopped...');
+      logger.info('Page became inactive, refresh token stopped...');
       this.refreshSessionTokenScheduledJob?.cancel();
     }
   }
