@@ -11,7 +11,7 @@
     "resolveJsonModule": true /* Include modules imported with .json extension. */,
     "isolatedModules": true, /* avoid using enum that does not work well outside typescript */
 
-    "strict": true, /* Enable all strict type-checking options. */
+    "strict": true /* Enable all strict type-checking options. */,
 
     /* Strict Type-Checking Options */
     "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
@@ -41,6 +41,14 @@
       "esnext",
       "dom"
     ],
+    "plugins": [
+      {
+        "transform": "./di-transformer-adapter.ts"
+      },
+      {
+        "transform": "ts-transformer-classname"
+      }
+    ]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules/**"],

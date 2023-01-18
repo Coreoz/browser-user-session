@@ -1317,6 +1317,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wessberg/di-compiler@npm:^2.2.6":
+  version: 2.2.6
+  resolution: "@wessberg/di-compiler@npm:2.2.6"
+  dependencies:
+    compatfactory: ^0.0.12
+    ts-evaluator: ^0.1.0
+  peerDependencies:
+    typescript: ">=3.x || >= 4.x"
+  checksum: 5d903e536dfe3544ff98ee8b3725e46f1a5b1791c7dad8f763327303627f120af3427eeb279425bc7e035b87b89eb288e6720a36af103aa8d43bae0419ae9a19
+  languageName: node
+  linkType: hard
+
+"@wessberg/di@npm:^2.0.3":
+  version: 2.1.0
+  resolution: "@wessberg/di@npm:2.1.0"
+  checksum: 813d6a5508403b166ca88a38f7d358ee80d0cea24fae308a1bba93e2b3754836128aed306396152c7c9f2a8b1197aee1eb3eea11fa247d3d36f0e937226680d4
+  languageName: node
+  linkType: hard
+
 "abab@npm:^2.0.3, abab@npm:^2.0.5":
   version: 2.0.6
   resolution: "abab@npm:2.0.6"
@@ -1788,6 +1807,7 @@ __metadata:
     "@types/react": ^18.0.26
     "@typescript-eslint/eslint-plugin": ^5.16.0
     "@typescript-eslint/parser": ^5.16.0
+    "@wessberg/di-compiler": ^2.2.6
     eslint: ^8.12.0
     eslint-config-airbnb-base: ^15.0.0
     eslint-config-airbnb-typescript: ^16.1.4
@@ -1804,6 +1824,8 @@ __metadata:
     source-map-support: ^0.5.21
     ts-jest: ^27.1.4
     ts-node: ^10.7.0
+    ts-transformer-classname: ^1.0.3
+    ttypescript: ^1.5.12
     typescript: ^4.6.3
   languageName: unknown
   linkType: soft
@@ -1974,7 +1996,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0":
+"chalk@npm:^4.0.0, chalk@npm:^4.1.1":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -2142,6 +2164,17 @@ __metadata:
   dependencies:
     delayed-stream: ~1.0.0
   checksum: 49fa4aeb4916567e33ea81d088f6584749fc90c7abec76fd516bf1c5aa5c79f3584b5ba3de6b86d26ddd64bae5329c4c7479343250cfe71c75bb366eae53bb7c
+  languageName: node
+  linkType: hard
+
+"compatfactory@npm:^0.0.12":
+  version: 0.0.12
+  resolution: "compatfactory@npm:0.0.12"
+  dependencies:
+    helpertypes: ^0.0.17
+  peerDependencies:
+    typescript: ">=3.x || >= 4.x"
+  checksum: 5bd4cb3c8060d68ff1e65a45ad623137b744467252903ae5fdf02215c5dfb894b5a68631a30b42cf54fb38cd2b82bc7b0879908a90039de5e63e4cfb5f813736
   languageName: node
   linkType: hard
 
@@ -3592,6 +3625,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"helpertypes@npm:^0.0.17":
+  version: 0.0.17
+  resolution: "helpertypes@npm:0.0.17"
+  checksum: b4f28f251cd8573e8f9809fd9daec72d5c7dd7adefae938c627b374be55ae60dab56d2a74902709d13e4d3118b7c2ab03a3b2292d519b926849fbd1ed9435d71
+  languageName: node
+  linkType: hard
+
 "hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
@@ -4792,7 +4832,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:^16.6.0":
+"jsdom@npm:^16.5.3, jsdom@npm:^16.6.0":
   version: 16.7.0
   resolution: "jsdom@npm:16.7.0"
   dependencies:
@@ -5507,6 +5547,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"object-path@npm:^0.11.5":
+  version: 0.11.8
+  resolution: "object-path@npm:0.11.8"
+  checksum: 684ccf0fb6b82f067dc81e2763481606692b8485bec03eb2a64e086a44dbea122b2b9ef44423a08e09041348fe4b4b67bd59985598f1652f67df95f0618f5968
+  languageName: node
+  linkType: hard
+
 "object.assign@npm:^4.1.2, object.assign@npm:^4.1.4":
   version: 4.1.4
   resolution: "object.assign@npm:4.1.4"
@@ -5855,6 +5902,16 @@ __metadata:
   dependencies:
     find-up: ^4.0.0
   checksum: 9863e3f35132bf99ae1636d31ff1e1e3501251d480336edb1c211133c8d58906bed80f154a1d723652df1fda91e01c7442c2eeaf9dc83157c7ae89087e43c8d6
+  languageName: node
+  linkType: hard
+
+"plume-ts-di@npm:^1.0.2":
+  version: 1.1.2
+  resolution: "plume-ts-di@npm:1.1.2"
+  dependencies:
+    "@wessberg/di": ^2.0.3
+    simple-logging-system: ^1.0.7
+  checksum: eb66e9f761b28daca59826fecbcb26988c942bea2bfae7671b75c107af90dd95cd6dea946c2d3733e7921ea142bcab279749e924327dce43a93778e3221cee45
   languageName: node
   linkType: hard
 
@@ -6210,7 +6267,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.1.6, resolve@npm:^1.20.0, resolve@npm:^1.22.0":
+"resolve@npm:>=1.9.0, resolve@npm:^1.1.6, resolve@npm:^1.20.0, resolve@npm:^1.22.0":
   version: 1.22.1
   resolution: "resolve@npm:1.22.1"
   dependencies:
@@ -6223,7 +6280,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>":
+"resolve@patch:resolve@>=1.9.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>":
   version: 1.22.1
   resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
   dependencies:
@@ -6462,7 +6519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-logging-system@npm:^1.0.0, simple-logging-system@npm:^1.1.0":
+"simple-logging-system@npm:^1.0.0, simple-logging-system@npm:^1.0.7, simple-logging-system@npm:^1.1.0":
   version: 1.1.0
   resolution: "simple-logging-system@npm:1.1.0"
   checksum: 261a12f26e74b55471ce2d301eda5c2daf0ea5684ece121036c7ed3a0604cd112caf3a7641b9d1f7b8819f1ff78376fee69afa4705149560023577aabcc57273
@@ -6889,6 +6946,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-evaluator@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "ts-evaluator@npm:0.1.0"
+  dependencies:
+    chalk: ^4.1.1
+    jsdom: ^16.5.3
+    object-path: ^0.11.5
+  peerDependencies:
+    typescript: ">=3.2.x || >= 4.x"
+  checksum: 3dde170e407dcaff8ccddd63546d831fdca3e9ce8d3d6b73b37a5f2837147b81be41263d582a721ec71b31648f7a519080c560abc5b2f3399f516d3b25fb0503
+  languageName: node
+  linkType: hard
+
 "ts-jest@npm:^27.1.4":
   version: 27.1.5
   resolution: "ts-jest@npm:27.1.5"
@@ -6960,6 +7030,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-transformer-classname@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "ts-transformer-classname@npm:1.0.3"
+  dependencies:
+    plume-ts-di: ^1.0.2
+  checksum: 4c510ddebe81b96e7fadfd94046ca71abbf9d6deaf4b3771279df83c81a2155dfb68705436281ce108569bc6ef2a7143dd81ff9629471ec248ad2dfc982e445a
+  languageName: node
+  linkType: hard
+
 "tsconfig-paths@npm:^3.14.1":
   version: 3.14.1
   resolution: "tsconfig-paths@npm:3.14.1"
@@ -6994,6 +7073,21 @@ __metadata:
   peerDependencies:
     typescript: ">=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta"
   checksum: 1843f4c1b2e0f975e08c4c21caa4af4f7f65a12ac1b81b3b8489366826259323feb3fc7a243123453d2d1a02314205a7634e048d4a8009921da19f99755cdc48
+  languageName: node
+  linkType: hard
+
+"ttypescript@npm:^1.5.12":
+  version: 1.5.15
+  resolution: "ttypescript@npm:1.5.15"
+  dependencies:
+    resolve: ">=1.9.0"
+  peerDependencies:
+    ts-node: ">=8.0.2"
+    typescript: ">=3.2.2"
+  bin:
+    ttsc: bin/tsc
+    ttsserver: bin/tsserver
+  checksum: 0328578050f08f9d12e6732a9fe71e93cc693ed5e825aefb7f4ba142d4d3d6912caa59a723f775de89cd066c8e609665fd5a7ccfa3b69fb3456c7f24d695db90
   languageName: node
   linkType: hard
 

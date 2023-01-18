@@ -235,6 +235,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
         logger.info('Expired session detected on browser page active, disconnecting...');
         this.discardSession();
       } else {
+        logger.info('Page became active, refresh token started...');
         this.refreshSessionTokenScheduledJob?.execute();
       }
     }
