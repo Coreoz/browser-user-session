@@ -1,8 +1,8 @@
-import { UserActivityListener } from './UserActivityListener';
+import UserActivityListener from './UserActivityListener';
 
 const PAGE_CHANGE_EVENTS = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
 
-export class BrowserUserActivityListener implements UserActivityListener {
+export default class BrowserUserActivityListener implements UserActivityListener {
   // eslint-disable-next-line class-methods-use-this
   startUserActivityDetector(registerUserActivity: () => void): void {
     // eslint-disable-next-line no-restricted-syntax

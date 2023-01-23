@@ -1,12 +1,12 @@
 import { Job, Scheduler } from 'simple-job-scheduler';
-import { UserActivityListener } from './user-activity/UserActivityListener';
+import UserActivityListener from './user-activity/UserActivityListener';
 
 /**
  * Manages user idleness detection in the webpage.
  * The user activity monitoring can be customized,
  * but default it checks mouse events, keyboards events and touch events.
  */
-export class IdlenessDetector {
+export default class IdlenessDetector {
   private detectorJob?: Job;
 
   private onIdlenessDetected?: () => void;

@@ -1,4 +1,4 @@
-export abstract class UserActivityListener {
+export default abstract class UserActivityListener {
   /**
    * Function that when called starts the detection of user activity.
    * It should generally add window listeners of mouse and keyboard events.

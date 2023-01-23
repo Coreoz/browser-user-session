@@ -2,8 +2,11 @@ import { Observable, observable, WritableObservable } from 'micro-observables';
 import { HttpError, HttpPromise } from 'simple-http-rest-client';
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
-import { IdlenessDetector } from './IdlenessDetector';
-import { PageActivityManager, PageActivity } from './page-activity/PageActivityManager';
+import IdlenessDetector from './IdlenessDetector';
+import {
+  PageActivity,
+  PageActivityManager,
+} from './page-activity/PageActivityManager';
 
 const logger = new Logger('JwtSessionManager');
 
@@ -44,7 +47,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     private readonly scheduler: Scheduler,
     private readonly pageActivityManager: PageActivityManager,
     private readonly idlenessDetector: IdlenessDetector,
-    private readonly config: JwtSessionManagerConfig
+    private readonly config: JwtSessionManagerConfig,
   ) {
     this.currentSession = observable(undefined);
     this.currentUser = observable(undefined);
@@ -56,7 +59,9 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
    * Get the JWT session, generally to make API calls
    */
   getSessionToken(): Observable<string | undefined> {
-    return this.currentSession.readOnly().select((session: RefreshableJwtToken | undefined) => session?.webSessionToken);
+    return this.currentSession.readOnly().select(
+      (session: RefreshableJwtToken | undefined) => session?.webSessionToken,
+    );
   }
 
   /**
@@ -246,7 +251,12 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
   }
 
   private isUserSessionValid(expirationDateInSeconds?: number): boolean {
-    return expirationDateInSeconds !== undefined && (expirationDateInSeconds * 1000 + this.config.thresholdInMillisToDetectExpiredSession > Date.now());
+    return expirationDateInSeconds !== undefined
+      && (
+        expirationDateInSeconds * 1000
+        + this.config.thresholdInMillisToDetectExpiredSession
+        > Date.now()
+      );
   }
 
   // eslint-disable-next-line class-methods-use-this
