@@ -23,8 +23,9 @@ export default class IdlenessDetector {
    * @param onIdlenessDetected Function that will be called by the IdlenessDetector when some idleness is detected
    */
   startService(onIdlenessDetected: () => void,
-    inactiveDurationInMillis: number,
-    idlenessDetectionCheckThreshold: number) {
+               inactiveDurationInMillis: number,
+               idlenessDetectionCheckThreshold: number,
+  ): void {
     this.onIdlenessDetected = onIdlenessDetected;
     if (this.detectorJob) {
       // do not start the service if it is already started
@@ -41,7 +42,7 @@ export default class IdlenessDetector {
   /**
    * Stop monitoring user activity and running actions in case of idleness
    */
-  stopService() {
+  stopService(): void {
     if (this.registerUserActivityFunction) {
       this.userActivityListener.stopUserActivityDetector(this.registerUserActivityFunction);
     }
@@ -52,7 +53,7 @@ export default class IdlenessDetector {
   /**
    * Get the number of milliseconds since the user is idle
    */
-  idleTimeInMillis() {
+  idleTimeInMillis(): number {
     return Date.now() - this.lastActivityTimestampInMillis;
   }
 
@@ -62,7 +63,7 @@ export default class IdlenessDetector {
    */
   private registerUserActivity(
     inactiveDurationInMillis: number, idlenessDetectionCheckThreshold: number,
-  ) {
+  ): void {
     this.lastActivityTimestampInMillis = Date.now();
     if (this.detectorJob === undefined) {
       this.startIdlenessDetection(inactiveDurationInMillis, idlenessDetectionCheckThreshold);
@@ -71,7 +72,7 @@ export default class IdlenessDetector {
 
   private startIdlenessDetection(
     inactiveDurationInMillis: number, idlenessDetectionCheckThreshold: number,
-  ) {
+  ): void {
     this.detectorJob = this.scheduler.schedule(
       'Idleness detector',
       () => this.verifyUserIdleness(inactiveDurationInMillis),
@@ -79,7 +80,7 @@ export default class IdlenessDetector {
     );
   }
 
-  private stopIdlenessDetection() {
+  private stopIdlenessDetection(): void {
     this.detectorJob?.cancel();
     this.detectorJob = undefined;
   }
@@ -88,7 +89,7 @@ export default class IdlenessDetector {
    * If the global idleness overcome the idleness threshold,
    * then the onIdlenessDetected function is called
    */
-  private verifyUserIdleness(inactiveDurationInMillis: number) {
+  private verifyUserIdleness(inactiveDurationInMillis: number): void {
     if (this.idleTimeInMillis() > inactiveDurationInMillis) {
       if (this.onIdlenessDetected) {
         this.onIdlenessDetected();

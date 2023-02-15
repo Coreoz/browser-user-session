@@ -34,7 +34,7 @@ export default class BrowserPageActivityManager implements PageActivityManager {
       || this.documentHiddenPropertyName === undefined;
   }
 
-  startService(onBrowserPageActivityChange: (pageActivityEvent: PageActivity) => void) {
+  startService(onBrowserPageActivityChange: (pageActivityEvent: PageActivity) => void): void {
     if (this.handleVisibilityChangeFunction) {
       // do not start the service if it is already started
       return;
@@ -50,7 +50,7 @@ export default class BrowserPageActivityManager implements PageActivityManager {
     }
   }
 
-  stopService() {
+  stopService(): void {
     if (!this.isVisibilityChangeEventUnavailable && this.handleVisibilityChangeFunction) {
       document.removeEventListener(
         this.visibilityChangeEventName, this.handleVisibilityChangeFunction, false,
@@ -59,7 +59,7 @@ export default class BrowserPageActivityManager implements PageActivityManager {
     this.handleVisibilityChangeFunction = undefined;
   }
 
-  private handleVisibilityChange(onBrowserPageActivityChange: (pageActivityEvent: PageActivity) => void) {
+  private handleVisibilityChange(onBrowserPageActivityChange: (pageActivityEvent: PageActivity) => void): void {
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     if ((document as any)[this.documentHiddenPropertyName]) {
       onBrowserPageActivityChange(PageActivity.INACTIVE);
