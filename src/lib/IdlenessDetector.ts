@@ -22,9 +22,10 @@ export default class IdlenessDetector {
    * Start monitoring user activity and running actions in case of idleness
    * @param onIdlenessDetected Function that will be called by the IdlenessDetector when some idleness is detected
    */
-  startService(onIdlenessDetected: () => void,
-               inactiveDurationInMillis: number,
-               idlenessDetectionCheckThreshold: number,
+  startService(
+    onIdlenessDetected: () => void,
+    inactiveDurationInMillis: number,
+    idlenessDetectionCheckThreshold: number,
   ): void {
     this.onIdlenessDetected = onIdlenessDetected;
     if (this.detectorJob) {
@@ -62,7 +63,8 @@ export default class IdlenessDetector {
    * The inactivity counter is reset.
    */
   private registerUserActivity(
-    inactiveDurationInMillis: number, idlenessDetectionCheckThreshold: number,
+    inactiveDurationInMillis: number,
+    idlenessDetectionCheckThreshold: number,
   ): void {
     this.lastActivityTimestampInMillis = Date.now();
     if (this.detectorJob === undefined) {

@@ -262,11 +262,6 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
 
   // eslint-disable-next-line class-methods-use-this
   private parseJwtSession(webSessionToken: string): U {
-    // maybe change this one day: https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-    return JSON.parse(
-      decodeURIComponent(
-        escape(decode(webSessionToken.split('.')[1])),
-      ),
-    );
+    return JSON.parse(decode(webSessionToken.split('.')[1]));
   }
 }
