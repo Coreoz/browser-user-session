@@ -15,7 +15,10 @@ export default class IdlenessDetector {
 
   private lastActivityTimestampInMillis: number = 0;
 
-  constructor(private readonly scheduler: Scheduler, private readonly userActivityListener: UserActivityListener) {
+  constructor(
+    private readonly scheduler: Scheduler,
+    private readonly userActivityListener: UserActivityListener,
+  ) {
   }
 
   /**
