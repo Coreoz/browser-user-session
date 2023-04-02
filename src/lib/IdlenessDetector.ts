@@ -9,33 +9,45 @@ import { UserActivityListener } from './user-activity/UserActivityListener';
 export class IdlenessDetector {
   private detectorJob?: Job;
 
+  private isIdlenessRunning: boolean;
+
   private onIdlenessDetected?: () => void;
 
   private registerUserActivityFunction?: () => void;
 
+  private onNewActivityDetected?: () => boolean;
+
   private lastActivityTimestampInMillis: number = 0;
 
   constructor(private readonly scheduler: Scheduler, private readonly userActivityListener: UserActivityListener) {
+    this.isIdlenessRunning = false;
   }
 
   /**
    * Start monitoring user activity and running actions in case of idleness
    * @param onIdlenessDetected Function that will be called by the IdlenessDetector when some idleness is detected
+   * @param onNewActivityDetected Function that will be called by the a activity has been detected by the userActivityListener
+   * @param inactiveDurationInMilliseconds Threshold time in millisecond after which the idleness job is cancelled
+   * @param idlenessDetectionCheckThreshold Define the time interval between each idleness check
    */
-  startService(onIdlenessDetected: () => void,
-    inactiveDurationInMillis: number,
-    idlenessDetectionCheckThreshold: number) {
+  startService(
+    onIdlenessDetected: () => void,
+    onNewActivityDetected: () => boolean,
+    inactiveDurationInMilliseconds: number,
+    idlenessDetectionCheckThreshold: number
+  ) {
     this.onIdlenessDetected = onIdlenessDetected;
+    this.onNewActivityDetected = onNewActivityDetected;
     if (this.detectorJob) {
       // do not start the service if it is already started
       return;
     }
     this.registerUserActivityFunction = () => this.registerUserActivity(
-      inactiveDurationInMillis, idlenessDetectionCheckThreshold,
+      inactiveDurationInMilliseconds, idlenessDetectionCheckThreshold,
     );
     this.lastActivityTimestampInMillis = Date.now();
     this.userActivityListener.startUserActivityDetector(this.registerUserActivityFunction);
-    this.startIdlenessDetection(inactiveDurationInMillis, idlenessDetectionCheckThreshold);
+    this.startIdlenessDetection(inactiveDurationInMilliseconds, idlenessDetectionCheckThreshold);
   }
 
   /**
@@ -59,10 +71,17 @@ export class IdlenessDetector {
   /**
    * Indicate that a user activity has been detected.
    * The inactivity counter is reset.
+   * onNewActivityDetected is executed only if the idleness job is not running and result can cancel the restart of the job
    */
   private registerUserActivity(
     inactiveDurationInMillis: number, idlenessDetectionCheckThreshold: number,
   ) {
+    if (!this.isIdlenessRunning) {
+      const idlenessDetectionMustNotRestart: boolean | undefined = this.onNewActivityDetected?.();
+      if (idlenessDetectionMustNotRestart) {
+        return;
+      }
+    }
     this.lastActivityTimestampInMillis = Date.now();
     if (this.detectorJob === undefined) {
       this.startIdlenessDetection(inactiveDurationInMillis, idlenessDetectionCheckThreshold);
@@ -72,6 +91,7 @@ export class IdlenessDetector {
   private startIdlenessDetection(
     inactiveDurationInMillis: number, idlenessDetectionCheckThreshold: number,
   ) {
+    this.isIdlenessRunning = true;
     this.detectorJob = this.scheduler.schedule(
       'Idleness detector',
       () => this.verifyUserIdleness(inactiveDurationInMillis),
@@ -82,6 +102,7 @@ export class IdlenessDetector {
   private stopIdlenessDetection() {
     this.detectorJob?.cancel();
     this.detectorJob = undefined;
+    this.isIdlenessRunning = false;
   }
 
   /**
@@ -90,9 +111,7 @@ export class IdlenessDetector {
    */
   private verifyUserIdleness(inactiveDurationInMillis: number) {
     if (this.idleTimeInMillis() > inactiveDurationInMillis) {
-      if (this.onIdlenessDetected) {
-        this.onIdlenessDetected();
-      }
+      this.onIdlenessDetected?.();
       this.stopIdlenessDetection();
     }
   }
