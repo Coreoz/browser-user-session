@@ -72,7 +72,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
   /**
    * Verify if there is a current user present
    */
-  isAuthenticated() {
+  isAuthenticated(): Observable<boolean> {
     return this.currentUser.select((user: U | undefined) => user !== undefined);
   }
 
