@@ -4,6 +4,7 @@ import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
 import { IdlenessDetector } from './IdlenessDetector';
 import { PageActivityManager } from './page-activity/PageActivityManager';
+import { decode } from 'js-base64';
 
 const logger = new Logger('JwtSessionManager');
 
@@ -250,10 +251,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     return expirationDateInSeconds !== undefined && (expirationDateInSeconds * 1000 + this.config.thresholdInMillisToDetectExpiredSession > Date.now());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   private parseJwtSession(webSessionToken: string): U {
-    // eslint-disable-next-line max-len
-    // maybe change this one day: https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-    return JSON.parse(decodeURIComponent(escape(atob(webSessionToken.split('.')[1]))));
+    return JSON.parse(decode(webSessionToken.split('.')[1]));
   }
 }

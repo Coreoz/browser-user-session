@@ -1135,6 +1135,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^17.0.36":
+  version: 17.0.45
+  resolution: "@types/node@npm:17.0.45"
+  checksum: aa04366b9103b7d6cfd6b2ef64182e0eaa7d4462c3f817618486ea0422984c51fc69fd0d436eae6c9e696ddfdbec9ccaa27a917f7c2e8c75c5d57827fe3d95e8
+  languageName: node
+  linkType: hard
+
 "@types/prettier@npm:^2.1.5":
   version: 2.7.2
   resolution: "@types/prettier@npm:2.7.2"
@@ -1317,15 +1324,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wessberg/di-compiler@npm:^2.2.6":
-  version: 2.2.6
-  resolution: "@wessberg/di-compiler@npm:2.2.6"
+"@wessberg/di-compiler@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@wessberg/di-compiler@npm:3.2.0"
   dependencies:
-    compatfactory: ^0.0.12
-    ts-evaluator: ^0.1.0
+    compatfactory: ^2.0.9
+    crosspath: ^2.0.0
+    get-tsconfig: 4.3.0
+    helpertypes: ^0.0.19
+    pirates: ^4.0.5
+    ts-evaluator: ^1.1.0
   peerDependencies:
     typescript: ">=3.x || >= 4.x"
-  checksum: 5d903e536dfe3544ff98ee8b3725e46f1a5b1791c7dad8f763327303627f120af3427eeb279425bc7e035b87b89eb288e6720a36af103aa8d43bae0419ae9a19
+  checksum: d1e9ef050d99e8cc1bb45dbed5501d2ff01d65985259835c711674e7ad7cd53e28db7a6090b4c357b5dc1128668096641730163472057429b494d83775b2e7e2
   languageName: node
   linkType: hard
 
@@ -1449,6 +1460,13 @@ __metadata:
   dependencies:
     string-width: ^4.1.0
   checksum: 6abfa08f2141d231c257162b15292467081fa49a208593e055c866aa0455b57f3a86b5a678c190c618faa79b4c59e254493099cb700dd9cf2293c6be2c8f5d8d
+  languageName: node
+  linkType: hard
+
+"ansi-colors@npm:^4.1.3":
+  version: 4.1.3
+  resolution: "ansi-colors@npm:4.1.3"
+  checksum: a9c2ec842038a1fabc7db9ece7d3177e2fe1c5dc6f0c51ecfbf5f39911427b89c00b5dc6b8bd95f82a26e9b16aaae2e83d45f060e98070ce4d1333038edceb0e
   languageName: node
   linkType: hard
 
@@ -1807,13 +1825,14 @@ __metadata:
     "@types/react": ^18.0.26
     "@typescript-eslint/eslint-plugin": ^5.16.0
     "@typescript-eslint/parser": ^5.16.0
-    "@wessberg/di-compiler": ^2.2.6
+    "@wessberg/di-compiler": ^3.2.0
     eslint: ^8.12.0
     eslint-config-airbnb-base: ^15.0.0
     eslint-config-airbnb-typescript: ^16.1.4
     eslint-plugin-import: ^2.25.4
     jest: ^27.5.1
     jest-config: ^27.5.1
+    js-base64: ^3.7.5
     micro-observables: ^1.7.2
     node-fetch: 2
     react: ">=16.8.0"
@@ -1996,7 +2015,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0, chalk@npm:^4.1.1":
+"chalk@npm:^4.0.0":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -2167,14 +2186,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compatfactory@npm:^0.0.12":
-  version: 0.0.12
-  resolution: "compatfactory@npm:0.0.12"
+"compatfactory@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "compatfactory@npm:2.0.9"
   dependencies:
-    helpertypes: ^0.0.17
+    helpertypes: ^0.0.19
   peerDependencies:
     typescript: ">=3.x || >= 4.x"
-  checksum: 5bd4cb3c8060d68ff1e65a45ad623137b744467252903ae5fdf02215c5dfb894b5a68631a30b42cf54fb38cd2b82bc7b0879908a90039de5e63e4cfb5f813736
+  checksum: 8b8632d7e5b85ac343372a4541186787136d50897c91e90d2294d88a8cbefa64f0f10b8a06e0731c24d526f47ec6f643cb2f4eef8e8e67013514ab289ec19062
   languageName: node
   linkType: hard
 
@@ -2263,6 +2282,15 @@ __metadata:
     shebang-command: ^2.0.0
     which: ^2.0.1
   checksum: 671cc7c7288c3a8406f3c69a3ae2fc85555c04169e9d611def9a675635472614f1c0ed0ef80955d5b6d4e724f6ced67f0ad1bb006c2ea643488fcfef994d7f52
+  languageName: node
+  linkType: hard
+
+"crosspath@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "crosspath@npm:2.0.0"
+  dependencies:
+    "@types/node": ^17.0.36
+  checksum: a209e02562504b91da143f1b3fe4c1f7e5dfc20c9c83b2538f802e243ad16fadc3d529aa4e5f47430f91f92f4c1ed0860206c9fcb4e0ad737723a44b32a7f61b
   languageName: node
   linkType: hard
 
@@ -3384,6 +3412,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"get-tsconfig@npm:4.3.0":
+  version: 4.3.0
+  resolution: "get-tsconfig@npm:4.3.0"
+  checksum: 2597aab99aa3a24db209e192a3e5874ac47fc5abc71703ee26346e0c5816cb346ca09fc813c739db5862d3a2905d89aeca1b0cbc46c2b272398d672309aaf414
+  languageName: node
+  linkType: hard
+
 "get-uri@npm:3":
   version: 3.0.2
   resolution: "get-uri@npm:3.0.2"
@@ -3625,10 +3660,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"helpertypes@npm:^0.0.17":
-  version: 0.0.17
-  resolution: "helpertypes@npm:0.0.17"
-  checksum: b4f28f251cd8573e8f9809fd9daec72d5c7dd7adefae938c627b374be55ae60dab56d2a74902709d13e4d3118b7c2ab03a3b2292d519b926849fbd1ed9435d71
+"helpertypes@npm:^0.0.19":
+  version: 0.0.19
+  resolution: "helpertypes@npm:0.0.19"
+  checksum: a6f53f5626d142c0b3ecfe1deb5e2f0610f7fb8a17a7d13fc79d8d4664cfa2fb5128b3ca04e12a18d7eae544e65ce35b1f3cd861cb10a32c247b1b0c881fb53c
   languageName: node
   linkType: hard
 
@@ -4795,6 +4830,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-base64@npm:^3.7.5":
+  version: 3.7.5
+  resolution: "js-base64@npm:3.7.5"
+  checksum: 67a78c8b1c47b73f1c6fba1957e9fe6fd9dc78ac93ac46cc2e43472dcb9cf150d126fb0e593192e88e0497354fa634d17d255add7cc6ee3c7b4d29870faa8e18
+  languageName: node
+  linkType: hard
+
 "js-sdsl@npm:^4.1.4":
   version: 4.2.0
   resolution: "js-sdsl@npm:4.2.0"
@@ -4832,7 +4874,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:^16.5.3, jsdom@npm:^16.6.0":
+"jsdom@npm:^16.6.0":
   version: 16.7.0
   resolution: "jsdom@npm:16.7.0"
   dependencies:
@@ -5547,7 +5589,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-path@npm:^0.11.5":
+"object-path@npm:^0.11.8":
   version: 0.11.8
   resolution: "object-path@npm:0.11.8"
   checksum: 684ccf0fb6b82f067dc81e2763481606692b8485bec03eb2a64e086a44dbea122b2b9ef44423a08e09041348fe4b4b67bd59985598f1652f67df95f0618f5968
@@ -5889,7 +5931,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pirates@npm:^4.0.4":
+"pirates@npm:^4.0.4, pirates@npm:^4.0.5":
   version: 4.0.5
   resolution: "pirates@npm:4.0.5"
   checksum: c9994e61b85260bec6c4fc0307016340d9b0c4f4b6550a957afaaff0c9b1ad58fbbea5cfcf083860a25cb27a375442e2b0edf52e2e1e40e69934e08dcc52d227
@@ -6946,16 +6988,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-evaluator@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "ts-evaluator@npm:0.1.0"
+"ts-evaluator@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "ts-evaluator@npm:1.1.0"
   dependencies:
-    chalk: ^4.1.1
-    jsdom: ^16.5.3
-    object-path: ^0.11.5
+    ansi-colors: ^4.1.3
+    crosspath: ^2.0.0
+    object-path: ^0.11.8
   peerDependencies:
+    jsdom: ">=14.x"
     typescript: ">=3.2.x || >= 4.x"
-  checksum: 3dde170e407dcaff8ccddd63546d831fdca3e9ce8d3d6b73b37a5f2837147b81be41263d582a721ec71b31648f7a519080c560abc5b2f3399f516d3b25fb0503
+  peerDependenciesMeta:
+    jsdom:
+      optional: true
+  checksum: 432b81621dd390663233d27f88bfeab13a8596105d4fe36c9ba32c74f9cdb78e7ea94213e711249254edea243c7ba2bc32f2c7dfa096c3b32b3dd7695ea5d69d
   languageName: node
   linkType: hard
 
