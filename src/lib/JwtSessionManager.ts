@@ -3,7 +3,6 @@ import { HttpError, HttpPromise } from 'simple-http-rest-client';
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
 import { IdlenessDetector } from './IdlenessDetector';
-import { PageActivityManager } from './page-activity/PageActivityManager';
 import { decode } from 'js-base64';
 
 const logger = new Logger('JwtSessionManager');
@@ -45,7 +44,6 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
   constructor(
     private readonly sessionRefresher: SessionRefresher,
     private readonly scheduler: Scheduler,
-    private readonly pageActivityManager: PageActivityManager,
     private readonly idlenessDetector: IdlenessDetector,
     private readonly config: JwtSessionManagerConfig
   ) {
@@ -164,7 +162,6 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     this.currentUserExpirationDateInSeconds = undefined;
     this.refreshSessionTokenScheduledJob?.cancel();
     this.idlenessDetector.stopService();
-    this.pageActivityManager.stopService();
   }
 
   private storeNewSession(sessionToken: RefreshableJwtToken): U | undefined {
