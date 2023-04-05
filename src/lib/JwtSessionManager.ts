@@ -8,8 +8,11 @@ import {
   PageActivity,
   PageActivityManager,
 } from './page-activity/PageActivityManager';
+import { IdlenessDetector } from './IdlenessDetector';
 
 const logger = new Logger('JwtSessionManager');
+
+const IDLENESS_CHECK_INTERVAL = 1000;
 
 export type ExpirableJwtValue = {
   exp: number;
@@ -46,7 +49,6 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
   constructor(
     private readonly sessionRefresher: SessionRefresher,
     private readonly scheduler: Scheduler,
-    private readonly pageActivityManager: PageActivityManager,
     private readonly idlenessDetector: IdlenessDetector,
     private readonly config: JwtSessionManagerConfig,
   ) {
@@ -167,7 +169,6 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     this.currentUserExpirationDateInSeconds = undefined;
     this.refreshSessionTokenScheduledJob?.cancel();
     this.idlenessDetector.stopService();
-    this.pageActivityManager.stopService();
   }
 
   private storeNewSession(sessionToken: RefreshableJwtToken): U | undefined {
@@ -217,38 +218,37 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
   }
 
   private startSessionRefreshAndIdleDetection(refreshDurationInMillis: number, inactiveDurationInMillis: number): void {
-    this.refreshSessionTokenScheduledJob = this.scheduler.schedule(
-      'Refresh session token',
-      () => this.refreshSession(),
-      refreshDurationInMillis,
-    );
+    this.startSessionRefresh(refreshDurationInMillis);
     this.idlenessDetector.startService(
       () => {
         logger.info('Idleness detected, disconnecting...');
-        this.discardSession();
+        this.refreshSessionTokenScheduledJob?.cancel();
       },
+      () => this.onNewUserActivityDetected(refreshDurationInMillis),
       inactiveDurationInMillis,
-      1000,
+      IDLENESS_CHECK_INTERVAL,
     );
-    this
-      .pageActivityManager
-      .startService((eventType: PageActivity) => this.onBrowserPageActivityChange(eventType));
   }
 
-  private onBrowserPageActivityChange(eventType: PageActivity): void {
-    if (eventType === PageActivity.ACTIVE) {
-      if (!this.isUserSessionValid(this.currentUserExpirationDateInSeconds)) {
-        logger.info('Expired session detected on browser page active, disconnecting...');
-        this.discardSession();
-      } else {
-        logger.info('Page became active, refresh token started...');
-        this.refreshSessionTokenScheduledJob?.execute();
-      }
+  private startSessionRefresh(refreshDurationInMillis: number): void {
+    this.refreshSessionTokenScheduledJob = this.scheduler.schedule(
+      'Refresh session token',
+      () => {
+        this.refreshSession()
+      },
+      refreshDurationInMillis,
+    );
+  }
+
+  private onNewUserActivityDetected(refreshDurationInMillis: number): boolean {
+    if (!this.isUserSessionValid(this.currentUserExpirationDateInSeconds)) {
+      logger.info('Expired session detected on browser page active, disconnecting...');
+      this.discardSession();
+      return true;
     }
-    if (eventType === PageActivity.INACTIVE) {
-      logger.info('Page became inactive, refresh token stopped...');
-      this.refreshSessionTokenScheduledJob?.cancel();
-    }
+    logger.info('Page became active, refresh token started...');
+    this.startSessionRefresh(refreshDurationInMillis);
+    return false; // idleness job must be restarted
   }
 
   private isUserSessionValid(expirationDateInSeconds?: number): boolean {
@@ -260,7 +260,6 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
       );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   private parseJwtSession(webSessionToken: string): U {
     return JSON.parse(decode(webSessionToken.split('.')[1]));
   }

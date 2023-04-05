@@ -6,3 +6,4 @@ export { default as NoneUserActivityListener } from './lib/user-activity/NoneUse
 export { default as UserActivityListener } from './lib/user-activity/UserActivityListener';
 export { default as IdlenessDetector } from './lib/IdlenessDetector';
 export { JwtSessionManager } from './lib/JwtSessionManager';
+export type { RefreshableJwtToken } from './lib/JwtSessionManager'
