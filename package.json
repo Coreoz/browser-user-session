@@ -36,7 +36,9 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "js-base64": "^3.7.5",
+    "js-base64": "^3.7.5"
+  },
+  "peerDependencies": {
     "micro-observables": "^1.7.2",
     "simple-http-rest-client": "^2.0.2",
     "simple-job-scheduler": "^1.1.2",
