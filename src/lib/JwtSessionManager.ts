@@ -1,9 +1,9 @@
+import { decode } from 'js-base64';
 import { Observable, observable, WritableObservable } from 'micro-observables';
 import { HttpError, HttpPromise } from 'simple-http-rest-client';
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
 import { IdlenessDetector } from './IdlenessDetector';
-import { decode } from 'js-base64';
 
 const logger = new Logger('JwtSessionManager');
 
@@ -45,7 +45,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     private readonly sessionRefresher: SessionRefresher,
     private readonly scheduler: Scheduler,
     private readonly idlenessDetector: IdlenessDetector,
-    private readonly config: JwtSessionManagerConfig
+    private readonly config: JwtSessionManagerConfig,
   ) {
     this.currentSession = observable(undefined);
     this.currentUser = observable(undefined);
@@ -227,7 +227,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     this.refreshSessionTokenScheduledJob = this.scheduler.schedule(
       'Refresh session token',
       () => {
-        this.refreshSession()
+        this.refreshSession();
       },
       refreshDurationInMillis,
     );
@@ -239,7 +239,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
       this.discardSession();
       return true;
     }
-    logger.info('Page became active, refresh token started...');
+    logger.info('Page became active, restarting refresh token process...');
     this.startSessionRefresh(refreshDurationInMillis);
     return false; // idleness job must be restarted
   }
