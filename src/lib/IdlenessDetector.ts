@@ -1,6 +1,11 @@
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { UserActivityListener } from './user-activity/UserActivityListener';
 
+export enum IdlenessDetectorSchedulerRestartState {
+  STOP,
+  RESTART,
+}
+
 /**
  * Manages user idleness detection in the webpage.
  * The user activity monitoring can be customized,
@@ -15,7 +20,7 @@ export class IdlenessDetector {
 
   private registerUserActivityFunction?: () => void;
 
-  private onNewActivityDetected?: () => boolean;
+  private onNewActivityDetected?: () => IdlenessDetectorSchedulerRestartState;
 
   private lastActivityTimestampInMillis: number = 0;
 
@@ -36,7 +41,7 @@ export class IdlenessDetector {
    */
   startService(
     onIdlenessDetected: () => void,
-    onNewActivityDetected: () => boolean,
+    onNewActivityDetected: () => IdlenessDetectorSchedulerRestartState,
     inactiveDurationInMilliseconds: number,
     idlenessDetectionCheckThreshold: number,
   ) {
@@ -82,8 +87,7 @@ export class IdlenessDetector {
     inactiveDurationInMillis: number, idlenessDetectionCheckThreshold: number,
   ) {
     if (!this.isIdlenessRunning) {
-      const idlenessDetectionMustNotRestart: boolean | undefined = this.onNewActivityDetected?.();
-      if (idlenessDetectionMustNotRestart) {
+      if (this.onNewActivityDetected?.() === IdlenessDetectorSchedulerRestartState.STOP) {
         return;
       }
     }

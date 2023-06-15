@@ -3,7 +3,10 @@ import { Observable, observable, WritableObservable } from 'micro-observables';
 import { HttpError, HttpPromise } from 'simple-http-rest-client';
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
-import { IdlenessDetector } from './IdlenessDetector';
+import {
+  IdlenessDetector,
+  IdlenessDetectorSchedulerRestartState,
+} from './IdlenessDetector';
 
 const logger = new Logger('JwtSessionManager');
 
@@ -237,15 +240,15 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     );
   }
 
-  private onNewUserActivityDetected(refreshDurationInMillis: number): boolean {
+  private onNewUserActivityDetected(refreshDurationInMillis: number): IdlenessDetectorSchedulerRestartState {
     if (!this.isUserSessionValid(this.currentUserExpirationDateInSeconds)) {
       logger.info('Expired session detected on browser page active, disconnecting...');
       this.discardSession();
-      return true;
+      return IdlenessDetectorSchedulerRestartState.STOP;
     }
     logger.info('Page became active, restarting refresh token process...');
     this.startSessionRefresh(refreshDurationInMillis);
-    return false; // idleness job must be restarted
+    return IdlenessDetectorSchedulerRestartState.RESTART;
   }
 
   private isUserSessionValid(expirationDateInSeconds?: number): boolean {
