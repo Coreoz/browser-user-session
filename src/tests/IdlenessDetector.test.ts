@@ -1,47 +1,39 @@
 import { Scheduler } from 'simple-job-scheduler';
-import { IdlenessDetector } from '../index';
-import { NoneUserActivityListener }
-  from '../lib/user-activity/NoneUserActivityListener';
+import {
+  IdlenessDetector,
+  IdlenessDetectorSchedulerRestartState,
+} from '../lib/IdlenessDetector';
+import {
+  NoneUserActivityListener,
+} from '../lib/user-activity/NoneUserActivityListener';
 
-const waitTimeout = (time: number) => {
-  setTimeout(() => {
-    console.log(`Wait for ${time}`);
-  }, time);
-};
+const waitTimeout = (durationInMillis: number) => new Promise((resolve) => {
+  setTimeout(resolve, durationInMillis);
+});
 
 describe('Test idleness detector component', () => {
-  let registerUserActivityFunction: () => void;
-  let idlenessDetectedCount: number = 0;
-  let refreshRestartCount: number = 0;
+  let idlenessDetectedCount: number;
+  let refreshRestartCount: number;
+
+  const noneActivityListener = new NoneUserActivityListener();
+  const idlenessDetector = new IdlenessDetector(
+    new Scheduler(),
+    noneActivityListener,
+  );
 
   const scheduler = new Scheduler();
 
-  // setTimeout n'est pas précis du tout, du coup il faut prévoir pas mal de marge pour les tests
-  // const idlenessDetector = new IdlenessDetector({
-  //     startUserActivityDetector,
-  //     stopUserActivityDetector: () => {
-  //     },
-  //     onIdlenessDetected: () => {
-  //       idlenessDetectedCount++;
-  //     },
-  //     scheduler,
-  //   },
-  // );
-
-  const idlenessDetector = new IdlenessDetector(
-    new Scheduler(),
-    new NoneUserActivityListener(),
-  );
-
   beforeEach(() => {
     idlenessDetectedCount = 0;
+    refreshRestartCount = 0;
+
     idlenessDetector.startService(
       () => {
         idlenessDetectedCount += 1;
       },
       () => {
         refreshRestartCount += 1;
-        return true;
+        return IdlenessDetectorSchedulerRestartState.RESTART;
       },
       60,
       10,
@@ -49,8 +41,8 @@ describe('Test idleness detector component', () => {
   });
 
   afterEach(() => {
-    idlenessDetector.stopService();
     scheduler.cancelAll();
+    idlenessDetector.stopService();
   });
 
   it(
@@ -58,40 +50,7 @@ describe('Test idleness detector component', () => {
     async () => {
       await waitTimeout(200);
       expect(idlenessDetectedCount).toEqual(1);
-    },
-  );
-
-  it(
-    'if there is some activity, '
-    + 'verify that the idleTime is correctly '
-    + 'reset and that the onIdlenessDetected function is not called',
-    async () => {
-      await waitTimeout(20);
-      registerUserActivityFunction();
-      await waitTimeout(20);
-      registerUserActivityFunction();
-      await waitTimeout(20);
-      registerUserActivityFunction();
-      await waitTimeout(20);
-      registerUserActivityFunction();
-      await waitTimeout(20);
-      registerUserActivityFunction();
-
-      expect(idlenessDetector.idleTimeInMillis()).toBeLessThan(20);
-      expect(idlenessDetectedCount).toEqual(0);
-    },
-  );
-
-  it(
-    'after some idleness has been detected and onIdlenessDetected '
-    + 'function has been called, make sure that once some activity is registered,'
-    + ' new idleness can be detected',
-    async () => {
-      await waitTimeout(100);
-      expect(idlenessDetectedCount).toEqual(1);
-      registerUserActivityFunction();
-      await waitTimeout(100);
-      expect(idlenessDetectedCount).toEqual(2);
+      expect(refreshRestartCount).toEqual(0);
     },
   );
 
@@ -100,21 +59,66 @@ describe('Test idleness detector component', () => {
     + ' no idleness is monitored anymore',
     async () => {
       idlenessDetector.stopService();
-      await waitTimeout(100);
+      await waitTimeout(1000);
       expect(idlenessDetectedCount).toEqual(0);
+      expect(refreshRestartCount).toEqual(0);
     },
   );
+
+  it(
+    'if there is some activity, verify that the idleTime is correctly reset '
+    + 'and that the onIdlenessDetected function is not called',
+    async () => {
+      await waitTimeout(20);
+      noneActivityListener.simulateActivity();
+      await waitTimeout(20);
+      noneActivityListener.simulateActivity();
+      await waitTimeout(20);
+      noneActivityListener.simulateActivity();
+      await waitTimeout(20);
+      noneActivityListener.simulateActivity();
+      await waitTimeout(20);
+      noneActivityListener.simulateActivity();
+      expect(idlenessDetector.idleTimeInMillis()).toBeLessThanOrEqual(20);
+      expect(idlenessDetectedCount).toEqual(0);
+      expect(refreshRestartCount).toEqual(0);
+    },
+  );
+
+  it(
+    'after some idleness has been detected and onIdlenessDetected function has been called,' +
+    ' make sure that once some activity is registered, new idleness can be detected',
+    async () => {
+      await waitTimeout(500);
+      expect(idlenessDetectedCount).toEqual(1);
+      noneActivityListener.simulateActivity();
+      await waitTimeout(500);
+      expect(idlenessDetectedCount).toEqual(2);
+      expect(refreshRestartCount).toEqual(1);
+    });
 
   it(
     'verify that if a service is started twice,'
     + ' then the second start will not actually start the service',
     async () => {
-      idlenessDetector.startService(() => {
-      }, 60, 10);
-      idlenessDetector.startService(() => {
-      }, 60, 10);
+      idlenessDetector.startService(
+        () => {
+        },
+        () => IdlenessDetectorSchedulerRestartState.STOP,
+        60,
+        10,
+      );
+      idlenessDetector.startService(
+        () => {
+          idlenessDetectedCount += 1;
+        },
+        () => IdlenessDetectorSchedulerRestartState.STOP,
+        60,
+        10,
+      );
       await waitTimeout(200);
       // if the service was started multiple times, the idleness count would be greater than 1
+      expect(idlenessDetectedCount).toEqual(1);
       expect(idlenessDetectedCount).toEqual(1);
     },
   );

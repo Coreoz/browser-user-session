@@ -1,11 +1,17 @@
 import { UserActivityListener } from './UserActivityListener';
 
 export class NoneUserActivityListener implements UserActivityListener {
-  // eslint-disable-next-line class-methods-use-this
-  startUserActivityDetector(): void {
+  triggerNewActivity: undefined | (() => void);
+
+  startUserActivityDetector(registerUserActivity: () => void): void {
+    this.triggerNewActivity = registerUserActivity;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   stopUserActivityDetector(): void {
+    this.triggerNewActivity = undefined;
+  }
+
+  simulateActivity(): void {
+    this.triggerNewActivity?.();
   }
 }
