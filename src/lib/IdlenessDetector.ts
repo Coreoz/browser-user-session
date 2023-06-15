@@ -25,10 +25,14 @@ export class IdlenessDetector {
 
   /**
    * Start monitoring user activity and running actions in case of idleness
-   * @param onIdlenessDetected Function that will be called by the IdlenessDetector when some idleness is detected
-   * @param onNewActivityDetected Function that will be called by the a activity has been detected by the userActivityListener
-   * @param inactiveDurationInMilliseconds Threshold time in millisecond after which the idleness job is cancelled
-   * @param idlenessDetectionCheckThreshold Define the time interval between each idleness check
+   * @param onIdlenessDetected Function that will be called
+   * by the IdlenessDetector when some idleness is detected
+   * @param onNewActivityDetected Function that will be called
+   * by the a activity has been detected by the userActivityListener
+   * @param inactiveDurationInMilliseconds Threshold time in millisecond
+   * after which the idleness job is cancelled
+   * @param idlenessDetectionCheckThreshold Define the time interval
+   * between each idleness check
    */
   startService(
     onIdlenessDetected: () => void,
@@ -71,7 +75,8 @@ export class IdlenessDetector {
   /**
    * Indicate that a user activity has been detected.
    * The inactivity counter is reset.
-   * onNewActivityDetected is executed only if the idleness job is not running and result can cancel the restart of the job
+   * onNewActivityDetected is executed only if the idleness job is not running
+   * and result can cancel the restart of the job
    */
   private registerUserActivity(
     inactiveDurationInMillis: number, idlenessDetectionCheckThreshold: number,

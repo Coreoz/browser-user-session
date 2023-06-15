@@ -57,7 +57,11 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
    * Get the JWT session, generally to make API calls
    */
   getSessionToken(): Observable<string | undefined> {
-    return this.currentSession.readOnly().select((session: RefreshableJwtToken | undefined) => session?.webSessionToken);
+    return this.currentSession
+      .readOnly()
+      .select((session: RefreshableJwtToken | undefined) => (
+        session?.webSessionToken),
+      );
   }
 
   /**
@@ -174,7 +178,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
   }
 
   private updateCurrentSession(sessionToken: RefreshableJwtToken): U | undefined {
-    const user = this.parseJwtSession(sessionToken.webSessionToken);
+    const user = JwtSessionManager.parseJwtSession<U>(sessionToken.webSessionToken);
     if (!this.isUserSessionValid(user?.exp)) {
       logger.info(
         'Tried to store an expired session, '
@@ -245,10 +249,13 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
   }
 
   private isUserSessionValid(expirationDateInSeconds?: number): boolean {
-    return expirationDateInSeconds !== undefined && (expirationDateInSeconds * 1000 + this.config.thresholdInMillisToDetectExpiredSession > Date.now());
+    return expirationDateInSeconds !== undefined
+      && ((expirationDateInSeconds * 1000
+        + this.config.thresholdInMillisToDetectExpiredSession
+      ) > Date.now());
   }
 
-  private parseJwtSession(webSessionToken: string): U {
+  private static parseJwtSession<U>(webSessionToken: string): U {
     return JSON.parse(decode(webSessionToken.split('.')[1]));
   }
 }

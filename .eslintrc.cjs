@@ -14,13 +14,13 @@ module.exports = {
     },
     ecmaVersion: 12,
     sourceType: 'module',
-    project: './tsconfig.json'
+    project: './tsconfig.json',
   },
   plugins: [
     '@typescript-eslint',
   ],
   rules: {
-    'max-len': ["error", { "code": 120 }],
+    'max-len': ['error', { 'code': 120 }],
     'react/require-default-props': 0,
     'import/no-absolute-path': 'off',
     'function-paren-newline': 'off',
@@ -41,5 +41,6 @@ module.exports = {
     ],
     '@typescript-eslint/ban-ts-comment': 'error',
     '@typescript-eslint/no-explicit-any': 2,
+    'import/prefer-default-export': 'off',
   },
 };
