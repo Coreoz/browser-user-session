@@ -3,11 +3,6 @@ import { Observable, observable, WritableObservable } from 'micro-observables';
 import { HttpError, HttpPromise } from 'simple-http-rest-client';
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
-import IdlenessDetector from './IdlenessDetector';
-import {
-  PageActivity,
-  PageActivityManager,
-} from './page-activity/PageActivityManager';
 import { IdlenessDetector } from './IdlenessDetector';
 
 const logger = new Logger('JwtSessionManager');
@@ -62,9 +57,11 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
    * Get the JWT session, generally to make API calls
    */
   getSessionToken(): Observable<string | undefined> {
-    return this.currentSession.readOnly().select(
-      (session: RefreshableJwtToken | undefined) => session?.webSessionToken,
-    );
+    return this.currentSession
+      .readOnly()
+      .select((session: RefreshableJwtToken | undefined) => (
+        session?.webSessionToken),
+      );
   }
 
   /**
@@ -181,7 +178,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
   }
 
   private updateCurrentSession(sessionToken: RefreshableJwtToken): U | undefined {
-    const user = this.parseJwtSession(sessionToken.webSessionToken);
+    const user = JwtSessionManager.parseJwtSession<U>(sessionToken.webSessionToken);
     if (!this.isUserSessionValid(user?.exp)) {
       logger.info(
         'Tried to store an expired session, '
@@ -234,7 +231,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     this.refreshSessionTokenScheduledJob = this.scheduler.schedule(
       'Refresh session token',
       () => {
-        this.refreshSession()
+        this.refreshSession();
       },
       refreshDurationInMillis,
     );
@@ -246,21 +243,20 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
       this.discardSession();
       return true;
     }
-    logger.info('Page became active, refresh token started...');
+    logger.info('Page became active, restarting refresh token process...');
     this.startSessionRefresh(refreshDurationInMillis);
     return false; // idleness job must be restarted
   }
 
   private isUserSessionValid(expirationDateInSeconds?: number): boolean {
     return expirationDateInSeconds !== undefined
-      && (
+      && ((
         expirationDateInSeconds * 1000
-        + this.config.thresholdInMillisToDetectExpiredSession
-        > Date.now()
-      );
+          + this.config.thresholdInMillisToDetectExpiredSession
+      ) > Date.now());
   }
 
-  private parseJwtSession(webSessionToken: string): U {
+  private static parseJwtSession<U>(webSessionToken: string): U {
     return JSON.parse(decode(webSessionToken.split('.')[1]));
   }
 }

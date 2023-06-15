@@ -1,12 +1,12 @@
 import { Job, Scheduler } from 'simple-job-scheduler';
-import UserActivityListener from './user-activity/UserActivityListener';
+import { UserActivityListener } from './user-activity/UserActivityListener';
 
 /**
  * Manages user idleness detection in the webpage.
  * The user activity monitoring can be customized,
  * but default it checks mouse events, keyboards events and touch events.
  */
-export default class IdlenessDetector {
+export class IdlenessDetector {
   private detectorJob?: Job;
 
   private isIdlenessRunning: boolean;
@@ -28,16 +28,20 @@ export default class IdlenessDetector {
 
   /**
    * Start monitoring user activity and running actions in case of idleness
-   * @param onIdlenessDetected Function that will be called by the IdlenessDetector when some idleness is detected
-   * @param onNewActivityDetected Function that will be called by the a activity has been detected by the userActivityListener
-   * @param inactiveDurationInMilliseconds Threshold time in millisecond after which the idleness job is cancelled
-   * @param idlenessDetectionCheckThreshold Define the time interval between each idleness check
+   * @param onIdlenessDetected Function that will be called
+   * by the IdlenessDetector when some idleness is detected
+   * @param onNewActivityDetected Function that will be called
+   * by the a activity has been detected by the userActivityListener
+   * @param inactiveDurationInMilliseconds Threshold time in millisecond
+   * after which the idleness job is cancelled
+   * @param idlenessDetectionCheckThreshold Define the time interval
+   * between each idleness check
    */
   startService(
     onIdlenessDetected: () => void,
     onNewActivityDetected: () => boolean,
     inactiveDurationInMilliseconds: number,
-    idlenessDetectionCheckThreshold: number
+    idlenessDetectionCheckThreshold: number,
   ): void {
     this.onIdlenessDetected = onIdlenessDetected;
     this.onNewActivityDetected = onNewActivityDetected;
@@ -74,7 +78,8 @@ export default class IdlenessDetector {
   /**
    * Indicate that a user activity has been detected.
    * The inactivity counter is reset.
-   * onNewActivityDetected is executed only if the idleness job is not running and result can cancel the restart of the job
+   * onNewActivityDetected is executed only if the idleness job is not running
+   * and result can cancel the restart of the job
    */
   private registerUserActivity(
     inactiveDurationInMillis: number,

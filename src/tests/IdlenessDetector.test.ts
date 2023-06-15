@@ -1,6 +1,6 @@
 import { Scheduler } from 'simple-job-scheduler';
 import { IdlenessDetector } from '../index';
-import NoneUserActivityListener
+import { NoneUserActivityListener }
   from '../lib/user-activity/NoneUserActivityListener';
 
 const waitTimeout = (time: number) => {
