@@ -12,6 +12,7 @@ const waitTimeout = (time: number) => {
 describe('Test idleness detector component', () => {
   let registerUserActivityFunction: () => void;
   let idlenessDetectedCount: number = 0;
+  let refreshRestartCount: number = 0;
 
   const scheduler = new Scheduler();
 
@@ -36,8 +37,11 @@ describe('Test idleness detector component', () => {
     idlenessDetectedCount = 0;
     idlenessDetector.startService(
       () => {
-        console.log('ge');
         idlenessDetectedCount += 1;
+      },
+      () => {
+        refreshRestartCount += 1;
+        return true;
       },
       60,
       10,
