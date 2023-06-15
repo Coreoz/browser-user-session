@@ -34,7 +34,7 @@ export class IdlenessDetector {
     onIdlenessDetected: () => void,
     onNewActivityDetected: () => boolean,
     inactiveDurationInMilliseconds: number,
-    idlenessDetectionCheckThreshold: number
+    idlenessDetectionCheckThreshold: number,
   ) {
     this.onIdlenessDetected = onIdlenessDetected;
     this.onNewActivityDetected = onNewActivityDetected;
