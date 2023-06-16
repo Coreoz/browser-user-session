@@ -17,7 +17,7 @@
     "clean": "rm -rf build",
     "typescript": "tsc --noEmit --outDir build/esm -p tsconfig.json",
     "eslint": "eslint src --ext .ts",
-    "prepare-release": "yarn clean && yarn typescript && yarn eslint && yarn build",
+    "prepare-release": "yarn clean && yarn typescript && yarn eslint && yarn jest && yarn build",
     "release": "release-it"
   },
   "main": "build/cjs/index.js",
