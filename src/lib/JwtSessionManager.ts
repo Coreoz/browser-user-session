@@ -135,7 +135,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
    * - Update the session token when it is updated from another tab
    * - Authenticate the user if he is connected from another tab
    */
-  synchronizeSessionFromOtherBrowserTags(): void {
+  synchronizeSessionFromOtherBrowserTabs(): void {
     window.removeEventListener('storage', this.handleStorageChangeFromOtherTab, false);
     window.addEventListener('storage', this.handleStorageChangeFromOtherTab, false);
   }
