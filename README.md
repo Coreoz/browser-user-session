@@ -58,7 +58,7 @@ export type User = {
 User type with expiration example
 ----------------------------------
 ```typescript
-export interface UserWithExpiration extends User {
+export type UserWithExpiration = User & {
   exp: number;
 }
 ```
@@ -138,7 +138,6 @@ Services binding example
 ------------------------
 ```typescript
   // browser dependent services
-  injector.registerSingleton(BrowserPageActivityManager, PageActivityManager);
   injector.registerSingleton(BrowserUserActivityListener, UserActivityListener);
   // other services
   injector.registerSingleton(IdlenessDetector);
