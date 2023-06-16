@@ -86,8 +86,8 @@ describe('Test idleness detector component', () => {
   );
 
   it(
-    'after some idleness has been detected and onIdlenessDetected function has been called,' +
-    ' make sure that once some activity is registered, new idleness can be detected',
+    'after some idleness has been detected and onIdlenessDetected function has been called,'
+    + ' make sure that once some activity is registered, new idleness can be detected',
     async () => {
       await waitTimeout(500);
       expect(idlenessDetectedCount).toEqual(1);
