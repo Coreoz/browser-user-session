@@ -221,7 +221,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     this.startSessionRefresh(refreshDurationInMillis);
     this.idlenessDetector.startService(
       () => {
-        logger.info('Idleness detected, disconnecting...');
+        logger.info('Idleness detected, stopping session refreshing...');
         this.refreshSessionTokenScheduledJob?.cancel();
       },
       () => this.onNewUserActivityDetected(refreshDurationInMillis),
