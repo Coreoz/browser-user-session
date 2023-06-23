@@ -1420,6 +1420,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wessberg/di@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@wessberg/di@npm:2.1.0"
+  checksum: 813d6a5508403b166ca88a38f7d358ee80d0cea24fae308a1bba93e2b3754836128aed306396152c7c9f2a8b1197aee1eb3eea11fa247d3d36f0e937226680d4
+  languageName: node
+  linkType: hard
+
 "abab@npm:^2.0.3, abab@npm:^2.0.5":
   version: 2.0.6
   resolution: "abab@npm:2.0.6"
@@ -1915,6 +1922,7 @@ __metadata:
     js-base64: ^3.7.5
     micro-observables: ^1.7.2
     node-fetch: 2
+    plume-ts-di: 1.2.4
     react: ">=16.8.0"
     release-it: ^15.1.0
     simple-http-rest-client: ^2.0.2
@@ -1928,6 +1936,7 @@ __metadata:
     typescript: ^4.6.3
   peerDependencies:
     micro-observables: ^1.7.2
+    plume-ts-di: 1.2.4
     simple-http-rest-client: ^2.0.2
     simple-job-scheduler: ^1.1.2
     simple-logging-system: ^1.1.0
@@ -6068,6 +6077,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"plume-ts-di@npm:1.2.4":
+  version: 1.2.4
+  resolution: "plume-ts-di@npm:1.2.4"
+  dependencies:
+    "@wessberg/di": ^2.1.0
+  peerDependencies:
+    simple-logging-system: ^1.0.7
+    typescript: ^4.0.2
+  checksum: 36b460fdb7607fe6fa7b889fa26ab7395c6a7baefd27e43376221a957541eff15c836e3e8628278f0a20788fe41866dcd05529a16bf67795b2288e7de0ae2f1c
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -7357,11 +7378,11 @@ __metadata:
 
 "typescript@patch:typescript@^4.6.3#~builtin<compat/typescript>":
   version: 4.9.4
-  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=ad5954"
+  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=289587"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 1caaea6cb7f813e64345190fddc4e6c924d0b698ab81189b503763c4a18f7f5501c69362979d36e19c042d89d936443e768a78b0675690b35eb663d19e0eae71
+  checksum: 2160f7ad975c59b2f5816817d3916be1d156c5688a7517602b3b640c5015e740f4ba933996ac85371d68f7bbdd41602150fb8b68334122ac637fdb5418085e7a
   languageName: node
   linkType: hard
 
