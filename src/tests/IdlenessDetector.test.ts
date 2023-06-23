@@ -1,7 +1,6 @@
 import { Scheduler } from 'simple-job-scheduler';
 import {
   IdlenessDetector,
-  IdlenessDetectorSchedulerRestartState,
 } from '../lib/IdlenessDetector';
 import {
   NoneUserActivityListener,
@@ -33,7 +32,6 @@ describe('Test idleness detector component', () => {
       },
       () => {
         refreshRestartCount += 1;
-        return IdlenessDetectorSchedulerRestartState.RESTART;
       },
       60,
       10,
@@ -104,7 +102,7 @@ describe('Test idleness detector component', () => {
       idlenessDetector.startService(
         () => {
         },
-        () => IdlenessDetectorSchedulerRestartState.STOP,
+        () => {},
         60,
         10,
       );
@@ -112,7 +110,7 @@ describe('Test idleness detector component', () => {
         () => {
           idlenessDetectedCount += 1;
         },
-        () => IdlenessDetectorSchedulerRestartState.STOP,
+        () => {},
         60,
         10,
       );

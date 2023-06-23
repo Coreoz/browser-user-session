@@ -5,7 +5,6 @@ import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
 import {
   IdlenessDetector,
-  IdlenessDetectorSchedulerRestartState,
 } from './IdlenessDetector';
 
 const logger = new Logger('JwtSessionManager');
@@ -240,15 +239,14 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     );
   }
 
-  private onNewUserActivityDetected(refreshDurationInMillis: number): IdlenessDetectorSchedulerRestartState {
+  private onNewUserActivityDetected(refreshDurationInMillis: number): void {
     if (!this.isUserSessionValid(this.currentUserExpirationDateInSeconds)) {
       logger.info('Expired session detected on browser page active, disconnecting...');
       this.discardSession();
-      return IdlenessDetectorSchedulerRestartState.STOP;
+      this.idlenessDetector.stopService();
     }
     logger.info('Page became active, restarting refresh token process...');
     this.startSessionRefresh(refreshDurationInMillis);
-    return IdlenessDetectorSchedulerRestartState.RESTART;
   }
 
   private isUserSessionValid(expirationDateInSeconds?: number): boolean {

@@ -1,26 +1,20 @@
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { UserActivityListener } from './user-activity/UserActivityListener';
 
-export enum IdlenessDetectorSchedulerRestartState {
-  STOP,
-  RESTART,
-}
-
 /**
  * Manages user idleness detection in the webpage.
  * The user activity monitoring can be customized,
  * but default it checks mouse events, keyboards events and touch events.
  */
 export class IdlenessDetector {
-  private detectorJob?: Job;
-
-  private isIdlenessRunning: boolean;
+  // value is defined only when the idleness detection is running, else its value is undefined
+  private idlenessDetectionJob?: Job;
 
   private onIdlenessDetected?: () => void;
 
   private registerUserActivityFunction?: () => void;
 
-  private onNewActivityDetected?: () => IdlenessDetectorSchedulerRestartState;
+  private onNewActivityDetected?: () => void;
 
   private lastActivityTimestampInMillis: number = 0;
 
@@ -28,7 +22,6 @@ export class IdlenessDetector {
     private readonly scheduler: Scheduler,
     private readonly userActivityListener: UserActivityListener,
   ) {
-    this.isIdlenessRunning = false;
   }
 
   /**
@@ -44,13 +37,13 @@ export class IdlenessDetector {
    */
   startService(
     onIdlenessDetected: () => void,
-    onNewActivityDetected: () => IdlenessDetectorSchedulerRestartState,
+    onNewActivityDetected: () => void,
     inactiveDurationInMilliseconds: number,
     idlenessDetectionCheckThreshold: number,
   ): void {
     this.onIdlenessDetected = onIdlenessDetected;
     this.onNewActivityDetected = onNewActivityDetected;
-    if (this.detectorJob) {
+    if (this.idlenessDetectionJob) {
       // do not start the service if it is already started
       return;
     }
@@ -90,13 +83,11 @@ export class IdlenessDetector {
     inactiveDurationInMillis: number,
     idlenessDetectionCheckThreshold: number,
   ): void {
-    if (!this.isIdlenessRunning) {
-      if (this.onNewActivityDetected?.() === IdlenessDetectorSchedulerRestartState.STOP) {
-        return;
-      }
+    if (!this.idlenessDetectionJob) {
+      this.onNewActivityDetected?.();
     }
     this.lastActivityTimestampInMillis = Date.now();
-    if (this.detectorJob === undefined) {
+    if (this.idlenessDetectionJob === undefined) {
       this.startIdlenessDetection(inactiveDurationInMillis, idlenessDetectionCheckThreshold);
     }
   }
@@ -104,8 +95,7 @@ export class IdlenessDetector {
   private startIdlenessDetection(
     inactiveDurationInMillis: number, idlenessDetectionCheckThreshold: number,
   ): void {
-    this.isIdlenessRunning = true;
-    this.detectorJob = this.scheduler.schedule(
+    this.idlenessDetectionJob = this.scheduler.schedule(
       'Idleness detector',
       () => this.verifyUserIdleness(inactiveDurationInMillis),
       idlenessDetectionCheckThreshold,
@@ -113,9 +103,8 @@ export class IdlenessDetector {
   }
 
   private stopIdlenessDetection(): void {
-    this.detectorJob?.cancel();
-    this.detectorJob = undefined;
-    this.isIdlenessRunning = false;
+    this.idlenessDetectionJob?.cancel();
+    this.idlenessDetectionJob = undefined;
   }
 
   /**
