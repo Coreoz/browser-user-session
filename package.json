@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "A lightweight package that provides helpers to manage user session.",
   "author": "Aurélien Manteaux <amanteaux@coreoz.com> (https://coreoz.com)",
+  "contributors": [
+    {
+      "name": "Vincent Dubois"
+    }
+  ],
   "repository": "https://github.com/Coreoz/browser-user-session",
   "homepage": "https://github.com/Coreoz/browser-user-session",
   "license": "Apache-2.0",
