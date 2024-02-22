@@ -210,8 +210,8 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
       && (now - parseInt(lastUserRefreshTimestamp, 10)) < (currentSession.refreshDurationInMillis / 2)
     ) {
       logger.debug(
-        'User session refresh aborted because it seems that it has already been ' +
-        'refreshed recently in another tab'
+        'User session refresh aborted because it seems that it has already been '
+        + 'refreshed recently in another tab',
       );
       return;
     }
@@ -268,7 +268,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     return expirationDateInSeconds !== undefined
       && ((
         expirationDateInSeconds * 1000
-          + this.config.thresholdInMillisToDetectExpiredSession
+        + this.config.thresholdInMillisToDetectExpiredSession
       ) > Date.now());
   }
 
