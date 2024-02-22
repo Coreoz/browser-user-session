@@ -209,7 +209,10 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
       lastUserRefreshTimestamp
       && (now - parseInt(lastUserRefreshTimestamp, 10)) < (currentSession.refreshDurationInMillis / 2)
     ) {
-      logger.debug('The user session is not refreshed as the last refresh call is done in less than 1 second');
+      logger.debug(
+        'User session refresh aborted because it seems that it has already been ' +
+        'refreshed recently in another tab'
+      );
       return;
     }
     localStorage.setItem(LOCAL_STORAGE_LAST_USER_REFRESH_TIMESTAMP, now.toFixed());
