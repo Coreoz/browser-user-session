@@ -1,6 +1,6 @@
 {
   "name": "browser-user-session",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A lightweight package that provides helpers to manage user session.",
   "author": "Aurélien Manteaux <amanteaux@coreoz.com> (https://coreoz.com)",
   "contributors": [
