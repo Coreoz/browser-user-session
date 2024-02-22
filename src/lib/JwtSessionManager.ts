@@ -3,13 +3,12 @@ import { Observable, observable, WritableObservable } from 'micro-observables';
 import { HttpError, HttpPromise } from 'simple-http-rest-client';
 import { Job, Scheduler } from 'simple-job-scheduler';
 import { Logger } from 'simple-logging-system';
-import {
-  IdlenessDetector,
-} from './IdlenessDetector';
+import { IdlenessDetector } from './IdlenessDetector';
 
 const logger = new Logger('JwtSessionManager');
 
 const IDLENESS_CHECK_INTERVAL = 1000;
+const LOCAL_STORAGE_LAST_USER_REFRESH_TIMESTAMP = 'last-user-refresh-session-timestamp';
 
 export type ExpirableJwtValue = {
   exp: number;
@@ -201,6 +200,19 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
       logger.error('Trying to refresh session whereas the current session is empty');
       return;
     }
+
+    const now: number = Date.now();
+    const lastUserRefreshTimestamp: string | null = localStorage.getItem(LOCAL_STORAGE_LAST_USER_REFRESH_TIMESTAMP);
+    // On ne refresh la session que si le dernier call n'a pas dépassé le temps du refreshToken, pour éviter que les
+    // deux appels rentrent en concurrence et qu'il y ai une incohérence de données
+    if (
+      lastUserRefreshTimestamp
+      && (now - parseInt(lastUserRefreshTimestamp, 10)) < (currentSession.refreshDurationInMillis / 2)
+    ) {
+      logger.debug('The user session is not refreshed as the last refresh call is done in less than 1 second');
+      return;
+    }
+    localStorage.setItem(LOCAL_STORAGE_LAST_USER_REFRESH_TIMESTAMP, now.toFixed());
 
     this
       .sessionRefresher
