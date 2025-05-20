@@ -190,6 +190,7 @@ export class JwtSessionManager<U extends ExpirableJwtValue> {
     }
 
     this.currentSession.set(sessionToken);
+    this.currentUser.set(user);
     this.currentUserExpirationDateInSeconds = user.exp;
     return user;
   }
